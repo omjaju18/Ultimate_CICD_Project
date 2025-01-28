@@ -60,3 +60,33 @@ Steps:
        7.2 Monitor the pipeline stages and fix any issues that arise.
 
 This end-to-end Jenkins pipeline will automate the entire CI/CD process for a Java application, from code checkout to production deployment, using popular tools like SonarQube, Argo CD, Helm, and Kubernetes.
+
+## Output:
+1. Jenkins Success CI
+
+<img width="959" alt="Jenkins Success CI" src="https://github.com/user-attachments/assets/cc0198b5-842e-4fca-be31-e97e27beb301" />
+
+<img width="959" alt="Success CI jenkins" src="https://github.com/user-attachments/assets/3e2a1eaa-59d9-49ec-b516-ebf2c58b67ab" />
+
+
+2. Image pushed through jenkins pipeline
+
+   <img width="959" alt="Image pushed through jenkins pipeline" src="https://github.com/user-attachments/assets/c8e0f691-0e9b-4f59-9f27-0e4320da7fa1" />
+
+3. Github update image code and Image Updation In the Github Directly through pipeline
+
+  <img width="959" alt="Github update image code " src="https://github.com/user-attachments/assets/146751e5-8260-4ca9-9d99-5a8e84bad202" />
+
+  <img width="874" alt="Updating the image" src="https://github.com/user-attachments/assets/c478a954-57f1-42d4-9bc6-bf0702861f55" />
+
+  <img width="943" alt="Image gets updated in the github " src="https://github.com/user-attachments/assets/49e26497-bf1b-4893-823b-02bdd00718c4" />
+
+
+4. Sonarqube Passed test
+
+  <img width="959" alt="Sonarqube Passed test" src="https://github.com/user-attachments/assets/bd13b498-e28a-4dbe-9a38-8ffbeaddb70d" />
+
+5. Successfully Deployed on argocd
+
+<img width="950" alt="Successfully Deployed on argocd" src="https://github.com/user-attachments/assets/f0132ad5-a94e-4c16-9dc1-5d42d15ca827" />
+
