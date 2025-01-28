@@ -1,64 +1,75 @@
 pipeline {
+  // Define the agent to use Docker with a specific image for Maven builds
   agent {
     docker {
-      image 'abhishekf5/maven-abhishek-docker-agent:v1'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
+      image 'abhishekf5/maven-abhishek-docker-agent:v1'  // Docker image for Maven
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket to allow access to the host's Docker daemon
     }
   }
+
   stages {
+    // Stage to check out the code from the repository
     stage('Checkout') {
       steps {
-        sh 'echo passed'
-        checkout scm
+        sh 'echo passed'  // Simple echo statement to show that this stage is being executed
+        checkout scm  // Checkout the source code from the repository based on Jenkins configuration
       }
     }
+
+    // Stage for building the project and creating the JAR file
     stage('Build and Test') {
       steps {
-        sh 'ls -ltr'
-        // build the project and create a JAR file
-        sh 'cd spring-boot-app && mvn clean package'
+        sh 'ls -ltr'  // List files in the directory to inspect the contents before building
+        // Build the project using Maven and create a JAR file
+        sh 'cd spring-boot-app && mvn clean package'  // Navigate to the spring-boot-app directory and run Maven to build the project
       }
     }
+
+    // Stage for performing static code analysis using SonarQube
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = "http://172.28.121.165:9000"
+        SONAR_URL = "http://172.28.121.165:9000"  // Set the URL for the SonarQube server
       }
       steps {
-        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {  // Use Jenkins credentials for SonarQube authentication
+          sh 'cd spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'  // Run SonarQube analysis with Maven
         }
       }
     }
+
+    // Stage for building the Docker image and pushing it to Docker Hub
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "omjaju18/ultimate-cicd:${BUILD_NUMBER}"  // Updated here
-        REGISTRY_CREDENTIALS = credentials('docker-creds')
+        DOCKER_IMAGE = "omjaju18/ultimate-cicd:${BUILD_NUMBER}"  // Set the Docker image name with the build number
+        REGISTRY_CREDENTIALS = credentials('docker-creds')  // Retrieve Docker credentials from Jenkins credentials store
       }
       steps {
         script {
-          sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-          def dockerImage = docker.image("${DOCKER_IMAGE}")
-          docker.withRegistry('https://index.docker.io/v1/', "docker-creds") {
-            dockerImage.push()
+          sh 'cd spring-boot-app && docker build -t ${DOCKER_IMAGE} .'  // Build the Docker image using the Dockerfile in the spring-boot-app directory
+          def dockerImage = docker.image("${DOCKER_IMAGE}")  // Assign the Docker image to a variable
+          docker.withRegistry('https://index.docker.io/v1/', "docker-creds") {  // Use the Docker credentials to authenticate to Docker Hub
+            dockerImage.push()  // Push the Docker image to the Docker registry (Docker Hub)
           }
         }
       }
     }
+
+    // Stage to update the deployment file in the Git repository with the new image tag
     stage('Update Deployment File') {
       environment {
-        GIT_REPO_NAME = "Ultimate_CICD_Project"
-        GIT_USER_NAME = "omjaju18"
+        GIT_REPO_NAME = "Ultimate_CICD_Project"  // Git repository name
+        GIT_USER_NAME = "omjaju18"  // Git user name
       }
       steps {
-        withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {  // Use GitHub credentials for authentication
           sh '''
-              git config user.email "omjaju03@gmail.com"
-              git config user.name "Om Jaju"
-              BUILD_NUMBER=${BUILD_NUMBER}
-              sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml
-              git add spring-boot-app-manifests/deployment.yml
-              git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+              git config user.email "omjaju03@gmail.com"  // Configure Git user email
+              git config user.name "Om Jaju"  // Configure Git user name
+              BUILD_NUMBER=${BUILD_NUMBER}  // Set the build number as an environment variable
+              sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml  // Replace 'replaceImageTag' in the deployment file with the build number
+              git add spring-boot-app-manifests/deployment.yml  // Stage the updated deployment file for commit
+              git commit -m "Update deployment image to version ${BUILD_NUMBER}"  // Commit the changes to the Git repository
+              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master  // Push the changes to the 'master' branch on GitHub using the provided GitHub token for authentication
           '''
         }
       }
