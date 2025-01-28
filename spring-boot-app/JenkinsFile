@@ -63,14 +63,15 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {  // Use GitHub credentials for authentication
           sh '''
-              git config user.email "omjaju03@gmail.com"  // Configure Git user email
-              git config user.name "Om Jaju"  // Configure Git user name
-              BUILD_NUMBER=${BUILD_NUMBER}  // Set the build number as an environment variable
-              sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml  // Replace 'replaceImageTag' in the deployment file with the build number
-              git add spring-boot-app-manifests/deployment.yml  // Stage the updated deployment file for commit
-              git commit -m "Update deployment image to version ${BUILD_NUMBER}"  // Commit the changes to the Git repository
-              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master  // Push the changes to the 'master' branch on GitHub using the provided GitHub token for authentication
-          '''
+            git config user.email "omjaju03@gmail.com"  # Configure Git user email
+            git config user.name "Om Jaju"  # Configure Git user name
+            BUILD_NUMBER=${BUILD_NUMBER}  # Set the build number as an environment variable
+            sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" spring-boot-app-manifests/deployment.yml  # Replace 'replaceImageTag' in the deployment file with the build number
+            git add spring-boot-app-manifests/deployment.yml  # Stage the updated deployment file for commit
+            git commit -m "Update deployment image to version ${BUILD_NUMBER}"  # Commit the changes to the Git repository
+            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master  # Push the changes to the 'master' branch on GitHub using the provided GitHub token for authentication
+        '''
+
         }
       }
     }
