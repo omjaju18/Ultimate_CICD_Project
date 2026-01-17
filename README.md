@@ -2,6 +2,58 @@
 
 ![Screenshot 2023-03-28 at 9 38 09 PM](https://user-images.githubusercontent.com/43399466/228301952-abc02ca2-9942-4a67-8293-f76647b6f9d8.png)
 
+---
+
+## 📸 Project Screenshots
+
+### 🚀 Jenkins CI Pipeline – Build Started
+
+<img width="959" height="445" alt="Success CI jenkins" src="https://github.com/user-attachments/assets/eb18207a-f58b-44bc-a173-e5612d2dd238" />
+
+---
+
+### ✅ SonarQube Quality Gate Passed
+
+<img width="959" height="436" alt="Sonarqube Passed test" src="https://github.com/user-attachments/assets/4708782c-ef83-43a1-8994-0cacd673869d" />
+
+---
+
+### ✅ Jenkins CI Pipeline – Build Successful
+
+<img width="959" height="476" alt="Jenkins Success CI" src="https://github.com/user-attachments/assets/7a7bd6e8-8510-4157-80b0-8ac5679d3732" />
+
+---
+
+### 📦 Docker Image Pushed via Jenkins Pipeline
+
+<img width="959" height="328" alt="Image pushed through jenkins pipeline" src="https://github.com/user-attachments/assets/90b399b0-2fe4-4727-88c3-0287e8f169db" />
+
+---
+
+### 🔄 Docker Image Tag Updated in GitHub Repository
+
+<img width="943" height="425" alt="Image gets updated in the github" src="https://github.com/user-attachments/assets/f7207e1d-d9c4-45b2-b525-c0ee8de4da9c" />
+
+---
+
+### 📝 GitHub Commit with Updated Image Version
+
+<img width="959" height="429" alt="Github update image code" src="https://github.com/user-attachments/assets/a92522b4-94ef-4699-b80f-8d00f10b582d" />
+
+---
+
+### 🔁 Kubernetes Manifest Updating Image
+
+<img width="874" height="357" alt="Updating the image" src="https://github.com/user-attachments/assets/06e601ee-60ae-4f8c-99b9-4597a18cfd08" />
+
+---
+
+### 🚀 Successfully Deployed on Argo CD
+
+<img width="950" height="441" alt="Successfully Deployed on argocd" src="https://github.com/user-attachments/assets/28089669-75ca-4fea-a3ce-bb71fe1e0c1f" />
+
+---
+
 
 Here are the step-by-step details to set up an end-to-end Jenkins pipeline for a Java application using SonarQube, Argo CD, Helm, and Kubernetes:
 
